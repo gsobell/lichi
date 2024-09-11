@@ -1,0 +1,3 @@
+[submodule "michi"]
+	path = michi
+	url = https://github.com/pasky/michi
