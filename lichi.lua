@@ -133,4 +133,38 @@ pat_gridcular_seq = {  -- Sequence of coordinate offsets of progressively wider 
 spat_patterndict_file = 'patterns.spat'
 large_patterns_file = 'patterns.prob'
 
--- until line -> 134 <- in michi
+function neighbors(c)
+ --  generator of coordinates for all neighbors of c
+    return {c-1, c+1, c-W, c+W}
+end
+
+function diag_neighbors(c)
+    -- generator of coordinates for all diagonal neighbors of c
+    return {c-W-1, c-W+1, c+W-1, c+W+1}
+end
+
+
+function board_put(board, c, p)
+    return board:sub(1, c) .. p .. board:sub(c + 2)
+end
+
+
+function floodfill(board, c)
+    -- Replace continuous-color area starting at c with special color '#'
+    local p = board:sub(c, c)
+    board = board:sub(1, c-1) .. "#" .. board:sub(c+1)
+    local fringe = {c}
+
+    while #fringe > 0 do
+        c = table.remove(fringe)
+        for _, d in ipairs(neighbors(c)) do
+            if board:sub(d, d) == p then
+                board = board:sub(1, d-1) .. "#" .. board:sub(d+1)
+                table.insert(fringe, d)
+            end
+        end
+    end
+    return board
+end
+
+-- until line -> 163 <- in michi
